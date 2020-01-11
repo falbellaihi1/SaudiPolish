@@ -1,0 +1,21 @@
+
+  {% load static %}
+  
+   <div class="col-12 mb-3">
+    <button class="create-btn btn btn-primary" type="button" name="button">New Customer</button>
+    <button class="purchase-btn btn btn-primary" type="button" name="button">New purchase</button>
+    <button class="vehicle-btn btn btn-primary" type="button" name="button">New Vehicle</button>
+  </div>
+
+    {% block extrascripts %}
+      <script type="text/javascript">
+      $(function () {
+      // Log in & Sign up buttons
+      $(".create-btn").modalForm({formURL: "{% url 'customer_create' %}"});
+      $(".purchase-btn").modalForm({formURL: "{% url 'purchase_create' %}"});
+      $(".vehicle-btn").modalForm({formURL: "{% url 'vehicle_create' %}"});
+      // Hide message
+   
+      });
+      </script>
+    {% endblock extrascripts %}

@@ -1,0 +1,57 @@
+{% load widget_tweaks %}
+
+<form method="post" action="">
+  {% csrf_token %}
+
+  <div class="modal-header">
+    <h3 class="modal-title">Create New</h3>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+      {% for error in form.non_field_errors %}
+        {{ error }}
+      {% endfor %}
+    </div>
+
+    {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {% render_field field class="form-control" placeholder=field.label %} 
+
+        {% ifequal field.label "Customer" %}<button class="create-cus-btn btn btn-primary"  type="button" name="button">New Customer</button> {%endifequal%}
+        {% ifequal field.label "Package" %}<button class="create-pak-btn btn btn-primary" type="button" name="button">New Package</button> {%endifequal%}
+        {% ifequal field.label "Vehicle" %}<button class="create-veh-btn btn btn-primary" type="button" name="button">New Package</button> {%endifequal%}
+        <div class="{% if field.errors %} invalid{% endif %}">
+          {% for error in field.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="submit-btn btn btn-primary">Create</button>
+  </div>
+
+</form>
+ {% block extrascripts %}
+      <script type="text/javascript">
+      $(function () {
+      // Log in & Sign up buttons
+      $(".create-cus-btn").modalForm({formURL: "{% url 'customer_create' %}"});
+      $(".create-pak-btn").modalForm({formURL: "{% url 'package_create' %}"});
+      $(".create-veh-btn").modalForm({formURL: "{% url 'vehicle_create' %}"});
+   
+
+     
+      });
+
+      </script>
+
+    {% endblock extrascripts %}

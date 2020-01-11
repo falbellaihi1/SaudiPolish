@@ -1,0 +1,19 @@
+
+  {% load static %}
+  
+   <div class="col-12 mb-3">
+    <button class="create-btn btn btn-primary" type="button" name="button">New Asset</button>
+  </div>
+
+    {% block extrascripts %}
+      <script type="text/javascript">
+      $(function () {
+      // Log in & Sign up buttons
+      $(".create-btn").modalForm({formURL: "{% url 'asset_create' %}"});
+      // Hide message
+      $(".alert").fadeTo(2000, 500).slideUp(500, function(){
+      $(".alert").slideUp(500);
+      });
+      });
+      </script>
+    {% endblock extrascripts %}
