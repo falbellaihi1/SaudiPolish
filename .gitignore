@@ -139,3 +139,6 @@ Scripts/
 include/
 **/migrations/*
 tests/report/
+
+
+*.js
