@@ -14,42 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from store.views import *
+from django.urls import include, path, re_path, include
+
 
 urlpatterns = [
-
+    path('store/', include('store.urls')),
     path('admin/', admin.site.urls),
-    path('', home),
-    path('index/', home),
-    #CUSTOMERS
-    path('customer/list',CustomerList.as_view(),name="customer_list"),
-    path('customer/create', CustomerCreateView.as_view(), name='customer_create'),
-    path('customer/update/<int:pk>', CustomerUpdateView.as_view(), name='update_customer'),
-    path('customer/delete/<int:pk>', CustomerDeleteView.as_view(), name='delete_customer'),
-    #VEHICLES
-    path('vehicle/list',VehicleList.as_view(),name="vehicle_list"),
-    path('vehicle/create', VehicleCreateView.as_view(), name = "vehicle_create"),
-    path('vehicle/update/<int:pk>', VehicleUpdateView.as_view(), name='update_vehicle'),
-    path('vehicle/delete/<int:pk>', VehiclesDeleteView.as_view(), name='delete_vehicle'),
-      #Packages
-    path('package/list',PackageList.as_view(),name="package_list"),
-    path('package/create', PackageCreateView.as_view(), name = "package_create"),
-    path('package/update/<int:pk>', PackageUpdateView.as_view(), name='update_package'),
-    path('package/delete/<int:pk>', PackageDeleteView.as_view(), name='delete_package'),
-    #ASSETS
-    path('assets/list', AssetsList.as_view(), name='assets_list'),
-    path('assets/create', AssetCreateView.as_view(), name='asset_create'),
-    path('asset/update/<int:pk>', AssetUpdateView.as_view(), name='update_asset'),
-    path('asset/delete/<int:pk>', AssetDeleteView.as_view(), name='delete_asset'),
-    #PURCHASES
-    path('purchase/list',PurchasesList.as_view(),name='purchases_list'),
-    path('purchase/create', PurchaseCreateView.as_view(), name = "purchase_create"),
-    path('purchase/update/<int:pk>', PurchaseUpdateView.as_view(), name='update_purchase'),
-    path('purchase/delete/<int:pk>', PurchaseDeleteView.as_view(), name='delete_purchase'),
-    #PRIFLE LINK
-    path('profile/<int:pk>', CustomerProfileReadView.as_view(), name='customer_profile'),
-
+    
 ]
 # ( 
 #     # home,

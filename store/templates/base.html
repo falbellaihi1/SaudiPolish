@@ -51,7 +51,7 @@
               <div class="icon-reorder tooltips" data-original-title="Toggle Navigation" data-placement="bottom"><i class="icon_menu"></i></div>
             </div>
             <!--logo start-->
-            <a href="/index/" class="logo">Saudi <span class="lite">Polish</span></a>
+            <a href="{% url 'index' %}" class="logo">Saudi <span class="lite">Polish</span></a>
             <!--logo end-->
             <div class="nav search-row" id="top_menu">
               <!--  search form start -->
@@ -148,7 +148,7 @@
                   <span class="menu-arrow arrow_carrot-right"></span>
                 </a>
                 <ul class="sub show" id="sub2" style="display: block;" >
-                  <li><a class="" href="/assets/list">Asset List</a></li>
+                  <li><a class="" href="{% url 'assets_list' %}">Asset List</a></li>
                 </ul>
               </li>
               <!--
