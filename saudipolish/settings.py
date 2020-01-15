@@ -38,12 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'store',
     'employees',
+    'accounts',
+    'landpage',
     'bootstrap_modal_forms',
     'crispy_forms',
     'widget_tweaks',
     'django_gravatar',
 
     ]
+AUTH_USER_MODEL ='accounts.MyUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,7 +63,7 @@ ROOT_URLCONF = 'saudipolish.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [(os.path.join(BASE_DIR, 'templates')),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

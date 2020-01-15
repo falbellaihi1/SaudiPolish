@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.template.loader import get_template
 import requests
 from django import forms
@@ -37,31 +39,32 @@ def data(request):
 
 ######################################
 #R
+@method_decorator(login_required, name='dispatch')
 class CustomerList(generic.ListView):
     model = Customer
     context_object_name = 'customers'
     template_name = 'customers/list_customers.html'
-
+@method_decorator(login_required, name='dispatch')
 class PackageList(generic.ListView):
     model = Package
     context_object_name = 'packages'
     template_name = 'packages/package_list.html'
-
+@method_decorator(login_required, name='dispatch')
 class VehicleList(generic.ListView):
     model = Vehicles
     context_object_name = 'vehicles'
     template_name = 'vehicles/vehicle_list.html'
-
+@method_decorator(login_required, name='dispatch')
 class AssetsList(generic.ListView):
     model = AssetsModel
     context_object_name = 'assets'
     template_name = 'asset_list.html'
-
+@method_decorator(login_required, name='dispatch')
 class PurchasesList(generic.ListView):
     model = PurchasesModel
     context_object_name = 'purchases'
     template_name = 'purchases/purchase_list.html'
-
+@method_decorator(login_required, name='dispatch')
 class CustomerProfileReadView(generic.DetailView):
 	model = PurchasesModel
 	template_name = 'customers/customer_profile.html'
@@ -89,32 +92,32 @@ class CustomerProfileReadView(generic.DetailView):
 #########################CUSTOMER ########################
 
 #C- CREATE
-
+@method_decorator(login_required, name='dispatch')
 class CustomerCreateView(BSModalCreateView):
     template_name = 'create_object.html'
     form_class = CustomerModelForm
     success_message = 'Success: Customer was created.'
     success_url = reverse_lazy('customer_list')
-
+@method_decorator(login_required, name='dispatch')
 class PackageCreateView(BSModalCreateView):
     template_name = 'create_object.html'
     form_class = PackageModelForm
     success_message = 'Success: Package was created.'
     success_url = reverse_lazy('package_list')
-
+@method_decorator(login_required, name='dispatch')
 class PurchaseCreateView(BSModalCreateView):
     template_name = 'create_object.html'
     form_class = PurchasesModelForm
     success_message = 'Success: asset was created.'
     success_url = reverse_lazy('customer_list')
 
-
+@method_decorator(login_required, name='dispatch')
 class VehicleCreateView(BSModalCreateView):
     template_name = 'create_object.html'
     form_class = VehiclesModelForm
     success_message = 'Success: asset was created.'
     success_url = reverse_lazy('customer_list')
-
+@method_decorator(login_required, name='dispatch')
 class AssetCreateView(BSModalCreateView):
     template_name = 'create_object.html'
     form_class = AssetsModelForm
@@ -125,34 +128,35 @@ class AssetCreateView(BSModalCreateView):
 
 
 #U update
+@method_decorator(login_required, name='dispatch')
 class CustomerUpdateView(BSModalUpdateView):
     model = Customer
     template_name = 'update/update_object.html'
     form_class = CustomerModelForm
     success_message = 'Success: Customer was updated.'
     success_url = reverse_lazy('customer_list')
-
+@method_decorator(login_required, name='dispatch')
 class PackageUpdateView(BSModalUpdateView):
     model = Package
     template_name = 'update/update_object.html'
     form_class = PackageModelForm
     success_message = 'Success: Customer was updated.'
     success_url = reverse_lazy('package_list')
-
+@method_decorator(login_required, name='dispatch')
 class VehicleUpdateView(BSModalUpdateView):
     model = Vehicles
     template_name = 'update/update_object.html'
     form_class = VehiclesModelForm
     success_message = 'Success: Vehicle was updated.'
     success_url = reverse_lazy('vehicle_list')
-
+@method_decorator(login_required, name='dispatch')
 class AssetUpdateView(BSModalUpdateView):
     model = AssetsModel
     template_name = 'update/update_object.html'
     form_class = AssetsModelForm
     success_message = 'Success: Asset was updated.'
     success_url = reverse_lazy('assets_list')
-
+@method_decorator(login_required, name='dispatch')
 class PurchaseUpdateView(BSModalUpdateView):
     model = PurchasesModel
     template_name = 'update/update_object.html'
@@ -162,32 +166,32 @@ class PurchaseUpdateView(BSModalUpdateView):
 ############################################
 
 #d delete
-
+@method_decorator(login_required, name='dispatch')
 class CustomerDeleteView(BSModalDeleteView):
     model = Customer
     template_name = 'customers/delete_customer.html'
     success_message = 'Success: Customer was deleted.'
     success_url = reverse_lazy('customer_list')
-
+@method_decorator(login_required, name='dispatch')
 class PackageDeleteView(BSModalDeleteView):
     model = Package
     template_name = 'packages/delete_package.html'
     success_message = 'Success: Customer was deleted.'
     success_url = reverse_lazy('customer_list')
 
-
+@method_decorator(login_required, name='dispatch')
 class VehiclesDeleteView(BSModalDeleteView):
     model = Vehicles
     template_name = 'vehicles/delete_vehicle.html'
     success_message = 'Success: Vehicle was deleted.'
     success_url = reverse_lazy('vehicle_list')
-
+@method_decorator(login_required, name='dispatch')
 class AssetDeleteView(BSModalDeleteView):
     model = AssetsModel
     template_name = 'assets/delete_asset.html'
     success_message = 'Success: Asset was deleted.'
     success_url = reverse_lazy('assets_list')
-
+@method_decorator(login_required, name='dispatch')
 class PurchaseDeleteView(BSModalDeleteView):
     model = PurchasesModel
     template_name = 'purchases/delete_purchase.html'
