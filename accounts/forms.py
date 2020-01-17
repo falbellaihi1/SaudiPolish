@@ -1,15 +1,13 @@
 
 from django import forms
-
-from .models import *
-
-from datetime import date
-from django.forms import widgets, SelectDateWidget
-from bootstrap_modal_forms.forms import BSModalForm
-
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-class UserLoginForm(BSModalForm):
-	class Meta:
-		model = MyUser
-		fields = ['username', 'password']
-		exclude =[]
+from django.contrib.auth.models import User
+
+from bootstrap_modal_forms.mixins import PopRequestMixin, CreateUpdateAjaxMixin
+
+
+
+class UserLoginForm(AuthenticationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'password']

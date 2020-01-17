@@ -1,1 +1,22 @@
 {% extends "base.html" %}
+
+{% block loginbutton%}
+
+ <button class="login-btn btn btn-primary" type="button" name="button">login</button>
+
+
+{%endblock%}
+{% block extrascripts %}
+<script type="text/javascript">
+  $(function () {
+      // Log in & Sign up buttons
+      $(".login-btn").modalForm({formURL: "{% url 'user_login' %}"});
+
+      });
+
+            // Hide message
+      $(".alert").fadeTo(2000, 500).slideUp(500, function(){
+        $(".alert").slideUp(500);
+      });
+      </script>
+       {% endblock extrascripts %}

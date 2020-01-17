@@ -58,7 +58,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'saudipolish.urls'
+ROOT_URLCONF = 'saudipolish.urls' 
 
 TEMPLATES = [
     {
@@ -75,7 +75,8 @@ TEMPLATES = [
         },
     },
 ]
-
+LOGIN_REDIRECT_URL = "index"
+LOGOUT_REDIRECT_URL = 'index'
 WSGI_APPLICATION = 'saudipolish.wsgi.application'
 
 
