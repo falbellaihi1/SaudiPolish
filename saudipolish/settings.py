@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'django_gravatar',
 
+
+
     ]
 AUTH_USER_MODEL ='accounts.MyUser'
 
