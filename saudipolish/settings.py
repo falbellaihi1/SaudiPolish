@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'employees',
     'accounts',
     'landpage',
+    'accounting',
     'bootstrap_modal_forms',
     'crispy_forms',
     'widget_tweaks',

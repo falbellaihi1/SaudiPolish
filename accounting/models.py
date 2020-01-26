@@ -15,6 +15,7 @@ class AccountModel(models.Model):
 	INCOME = 'Rev'
 	EXPENSE ='EXP'
 	CAPITAL = 'CAP'
+	ACCOUNTS_RECEVIABLE ='AR'
 
 	""""					DEBIT	CREDIT		"""
 	ACCOUNT_CHOICES =[
@@ -23,16 +24,16 @@ class AccountModel(models.Model):
 	(INCOME,'revenue'),#	Decrease, Increase
 	(EXPENSE, 'Expense'),# Increase , Decrease
 	(CAPITAL, 'Capital'),# Decrease, Increase
+	(ACCOUNTS_RECEVIABLE, 'Accounts Receivable')
 
 	]
-	code = models.IntegerField()
-	name = models.CharField(max_lenght=64)
+	name = models.CharField(max_length=64)
 	account_type = models.CharField(max_length=3, choices= ACCOUNT_CHOICES, default = ASSETS)
 	debit = models.DecimalField(max_digits=12, decimal_places=2, null = True, default=0.0)
 	credit = models.DecimalField(max_digits=12, decimal_places=2, null = True, default=0.0)
 	balance  = models.DecimalField(max_digits=12, decimal_places=2, null = True, default=0.0)
 
-class Journal(models.Model):
+class JournalModel(models.Model):
 	SALE = 'Sale.'
 	PURCHASE= 'Purchase.'
 	BANK = 'Bank.'
@@ -46,15 +47,30 @@ class Journal(models.Model):
 	(GENERAL,'GENERAL')
 
 	]
-	name = models.CharField(max_lenght=64)
+	name = models.CharField(max_length=64)
 	journal_type = models.CharField(max_length=9, choices=JOURNAL_CHOICES, default=SALE)
-	defualt_credit_account_id = models.ForeignKey(Account,  on_delete=models.CASCADE, null=True, related_name="credit_account_id")
-	defualt_credit_account_id = models.ForeignKey(Account,  on_delete=models.CASCADE, null=True, related_name="debit_account_id")
+
+	defualt_credit_account_id = models.ForeignKey(AccountModel,  on_delete=models.CASCADE, null=True, related_name="credit_account_id")
+	defualt_credit_account_id = models.ForeignKey(AccountModel,  on_delete=models.CASCADE, null=True, related_name="debit_account_id")
+
+"""
+a customer who owes 500 for car detail is automatically stored in account receivable once vehicle/purchase is created 
+a transaction model will hold information about purchases initialized by the user and is automatically created
+transaction should atuomatically creats journal and provide journal with the name of whats the transaction and the balance, and what is the type of account that is debited/credited
+
+a journal model  should provide account with the information needed to adjust the balance for every transaction that occured 
+
+"""
+class TransactionModel(models.Model):
+	#code = models.IntegerField() #auto generated
+	name = models.CharField(max_length=64)
+	journal_id = models.ForeignKey(JournalModel,  on_delete=models.CASCADE, null=True, related_name="journal_id_transaction") #will choose for example what account to debit from types defined in journal ex: CASH
+	balance = models.DecimalField(max_digits=12, decimal_places=2, null = True, default=0.0)
 
 class Invoice(models.Model):
-	journal_id = models.ForeignKey(Journal,  on_delete=models.CASCADE, null=True, related_name="Journal_ID")
-	account_id = models.ForeignKey(Account,  on_delete=models.CASCADE, null=True, related_name="Account_ID")
-	number = models.CharField(max_lenght=64)
+	journal_id = models.ForeignKey(JournalModel,  on_delete=models.CASCADE, null=True, related_name="Journal_id_invoice")
+	account_id = models.ForeignKey(AccountModel,  on_delete=models.CASCADE, null=True, related_name="account_id_invoice")
+	number = models.CharField(max_length=64)
 	amount  = models.DecimalField(max_digits=12, decimal_places=2, null = True, default=0.0)
 
 class FiscalYear(models.Model):
@@ -63,23 +79,19 @@ class FiscalYear(models.Model):
 	DateTo = models.DateField()
 
 class period(models.Model):
-	fiscalyeal_id=models.ForeignKey(fiscalyear,  on_delete=models.CASCADE, null=True, related_name="fiscalyear_id")
-
-class InvoiceLine(models.Model):
-	Invoice_id = models.ForeignKey(Invoice,  on_delete=models.CASCADE, null=True, related_name="Journal_ID")
-	product_id = models.ForeignKey(Account,  on_delete=models.CASCADE, null=True, related_name="Account_ID")
-	account_id = models.ForeignKey(Account,  on_delete=models.CASCADE, null=True, related_name="account_id")
-	period_id =models.ForeignKey(Account,  on_delete=models.CASCADE, null=True, related_name="account_id")
-	amount  = models.DecimalField(max_digits=12, decimal_places=2, null = True, default=0.0)
+	fiscalyeal_id=models.ForeignKey(FiscalYear,  on_delete=models.CASCADE, null=True, related_name="fiscalyear_id")
 
 
-class AssetsModel(model.Models):
+
+
+
+class AssetsModel(models.Model):
 	ASSET_CHOICES = []
 	name = models.CharField(max_length=65, default="asset name")
 	asset_type = models.CharField(max_length=3, choices= ASSET_CHOICES, default = "ASSETS")
 	amount  = models.DecimalField(max_digits=12, decimal_places=2, null = True, default=0.0)
 
-class LibilitiesMode(model.Models):
+class LibilitiesMode(models.Model):
 	ASSET_CHOICES = []
 	name = models.CharField(max_length=65, default="Libility name")
 	Libility_type = models.CharField(max_length=3, choices= ASSET_CHOICES, default = "libility")
