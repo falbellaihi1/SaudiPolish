@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Customer, Vehicles, PurchasesModel, AssetsModel, Package
+from .models import StoreExpensesModel,AssetsModel, PurchasesModel,Vehicles, Customer, Package
 
 from datetime import date
 from django.forms import widgets, SelectDateWidget
@@ -40,18 +40,41 @@ class VehiclesModelForm(BSModalForm):
 		model = Vehicles
 		fields = ["make","model", "plate_num", "color", "mileage", "customer"]
 		exclude =[]
+		
 
 
 
 class PurchasesModelForm(BSModalForm):
-
+	redirect = False
 	class Meta:
+		
+		redirect = False
+		print(redirect)
 		model = PurchasesModel
 		fields = ["vehicle","package", "bookings","payments"]
 		exclude =[]
 		widgets = {
-        'bookings': forms.DateInput(format=('%m/%d/%Y'), attrs={'class':'form-control', 'placeholder':'Select a date', 'type':'date'}),
-    }
+        'bookings': forms.DateInput(format=('%m/%d/%Y'), attrs={'class':'form-control', 'placeholder':'Select a date', 'type':'date'}),}
+	def clean(self):
+		super(PurchasesModelForm, self).clean() 
+		payment = self.cleaned_data.get('payments') 
+		package = self.cleaned_data.get('package') 
+		print(payment)
+		if payment is not None:
+			if payment > package.package_price:
+				self._errors['payments'] = self.error_class(['Payments cannot be larger than package price'])
+				self.redirect = True
+				
+		if payment is None:
+			self._errors['payments'] = self.error_class(['Wrong'])
+			raise forms.ValidationError('hjhj')
+			self.redirect = True
+
+
+		print(self.redirect)
+		return self.cleaned_data 
+	
+
 
 
 class EditVehiclesModelForm(forms.ModelForm):
@@ -76,4 +99,14 @@ class PackageModelForm(BSModalForm):
 	class Meta:
 		model = Package
 		fields = ["package_name","package_specification", "package_price"]
+		exclude =[]
+
+
+
+class ExpenseModelForm(BSModalForm):
+
+
+	class Meta:
+		model = StoreExpensesModel
+		fields = ["amount","expense_type", "description"]
 		exclude =[]

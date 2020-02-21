@@ -8,7 +8,7 @@ from django.db import models
 
 """
 
-class AccountModel(models.Model):
+class AccountModel(models.Model): # a record to track financail activities of a specific asset, liability, rquity, revenue or expense equation Assets = Liabilities + equity + revenues - expenses
 
 	ASSETS = 'A'
 	LIABILITY= 'L'
@@ -32,8 +32,12 @@ class AccountModel(models.Model):
 	debit = models.DecimalField(max_digits=12, decimal_places=2, null = True, default=0.0)
 	credit = models.DecimalField(max_digits=12, decimal_places=2, null = True, default=0.0)
 	balance  = models.DecimalField(max_digits=12, decimal_places=2, null = True, default=0.0)
+	def __unicode__(self):
+		return self.name + " : " + self.account_type
+	def __str__(self):
+		return self.name + " : " + self.account_type
 
-class JournalModel(models.Model):
+class JournalModel(models.Model): # records any transaction either eco or no eco 
 	SALE = 'Sale.'
 	PURCHASE= 'Purchase.'
 	BANK = 'Bank.'
@@ -50,8 +54,12 @@ class JournalModel(models.Model):
 	name = models.CharField(max_length=64)
 	journal_type = models.CharField(max_length=9, choices=JOURNAL_CHOICES, default=SALE)
 
-	defualt_credit_account_id = models.ForeignKey(AccountModel,  on_delete=models.CASCADE, null=True, related_name="credit_account_id")
-	defualt_credit_account_id = models.ForeignKey(AccountModel,  on_delete=models.CASCADE, null=True, related_name="debit_account_id")
+	defualt_debit_account_id = models.ForeignKey(AccountModel,  on_delete=models.CASCADE, null=True, related_name="debit_account_id") # always decrease a value of an account
+	defualt_credit_account_id = models.ForeignKey(AccountModel,  on_delete=models.CASCADE, null=True, related_name="credit_account_id") # always increase a value of an account
+	def __unicode__(self):
+		return self.name + " : " + self.defualt_credit_account_id.account_type
+	def __str__(self):
+		return self.name + " : " + self.defualt_credit_account_id.account_type
 
 """
 a customer who owes 500 for car detail is automatically stored in account receivable once vehicle/purchase is created 
@@ -61,7 +69,7 @@ transaction should atuomatically creats journal and provide journal with the nam
 a journal model  should provide account with the information needed to adjust the balance for every transaction that occured 
 
 """
-class TransactionModel(models.Model):
+class TransactionModel(models.Model): # an event that impact financial statement of the business
 	#code = models.IntegerField() #auto generated
 	name = models.CharField(max_length=64)
 	journal_id = models.ForeignKey(JournalModel,  on_delete=models.CASCADE, null=True, related_name="journal_id_transaction") #will choose for example what account to debit from types defined in journal ex: CASH
@@ -80,8 +88,6 @@ class FiscalYear(models.Model):
 
 class period(models.Model):
 	fiscalyeal_id=models.ForeignKey(FiscalYear,  on_delete=models.CASCADE, null=True, related_name="fiscalyear_id")
-
-
 
 
 

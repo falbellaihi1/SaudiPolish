@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path, re_path, include
+from django.conf.urls import include, url
+from django.conf import settings
 
 
 urlpatterns = [
@@ -22,9 +24,19 @@ urlpatterns = [
     path('employees/', include('employees.urls')),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('admin/', admin.site.urls),
-    
+    path('admin/', admin.site.urls), 
+
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+
+        # For django versions before 2.0:
+        # url(r'^__debug__/', include(debug_toolbar.urls)),
+
+] + urlpatterns
 # ( 
 #     # home,
 #     # CustomerList,

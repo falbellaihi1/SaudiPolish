@@ -1,5 +1,5 @@
 from django.db import models
-
+from model_utils import Choices
 # Create your models here.
 
 # Store Module
@@ -86,6 +86,32 @@ class AssetsModel (models.Model):
 		self.total_price = self.asset_price * self.quantity
 		super(AssetsModel, self).save(*args, **kwargs)
 
+class StoreExpensesModel(models.Model):
+	expenses_choices = Choices(
+        ("Food","Food Expenses"),
+        ("Needs", "Store Needs"),  
+        ("Advanced Payment", "Advanced Payment"),  
+        ("Salaries", "Salaries"),
+        ("Other", "Other"), 
+       
+    )
+	amount = models.DecimalField(max_digits=9, decimal_places=2, null = True, default=0.0)
+	expense_type = models.CharField( 
+        max_length = 20, 
+        choices = expenses_choices, 
+        default = 'Food'
+        )
+	description = models.TextField(default="", blank=True)
+
+
+
+
+""""
+- prodct line
+	* products available (packages)
+		-desctiptionP
+
+"""
 
 
 	

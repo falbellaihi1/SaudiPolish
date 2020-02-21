@@ -5,6 +5,7 @@
     <button class="create-btn btn btn-primary" type="button" name="button">New Customer</button>
     <button class="purchase-btn btn btn-primary" type="button" name="button">New purchase</button>
     <button class="vehicle-btn btn btn-primary" type="button" name="button">New Vehicle</button>
+    <button class="expense-btn btn btn-primary" type="button" name="button">New Expense</button>
   </div>
 
     {% block extrascripts %}
@@ -14,6 +15,7 @@
       $(".create-btn").modalForm({formURL: "{% url 'customer_create' %}"});
       $(".purchase-btn").modalForm({formURL: "{% url 'purchase_create' %}"});
       $(".vehicle-btn").modalForm({formURL: "{% url 'vehicle_create' %}"});
+      $(".expense-btn").modalForm({formURL: "{% url 'expense_create' %}"});
       // Hide message
    
       });

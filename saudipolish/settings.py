@@ -45,13 +45,16 @@ INSTALLED_APPS = [
     'crispy_forms',
     'widget_tweaks',
     'django_gravatar',
+    'debug_toolbar',
 
 
 
     ]
+
 AUTH_USER_MODEL ='accounts.MyUser'
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,7 +62,37 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+
 ]
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
+DEBUG_TOOLBAR_PANELS = [
+    'debug_toolbar.panels.versions.VersionsPanel',
+    'debug_toolbar.panels.timer.TimerPanel',
+    'debug_toolbar.panels.settings.SettingsPanel',
+    'debug_toolbar.panels.headers.HeadersPanel',
+    'debug_toolbar.panels.request.RequestPanel',
+    'debug_toolbar.panels.sql.SQLPanel',
+    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+    'debug_toolbar.panels.templates.TemplatesPanel',
+    'debug_toolbar.panels.cache.CachePanel',
+    'debug_toolbar.panels.signals.SignalsPanel',
+    'debug_toolbar.panels.logging.LoggingPanel',
+    'debug_toolbar.panels.redirects.RedirectsPanel',
+    'debug_toolbar.panels.profiling.ProfilingPanel',
+]
+
+MIDDLEWARE_CLASSES = (
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.transaction.TransactionMiddleware',
+)
+
 
 ROOT_URLCONF = 'saudipolish.urls' 
 
@@ -86,12 +119,28 @@ WSGI_APPLICATION = 'saudipolish.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+HORDAK_MAX_DIGITS =13
+HORDAK_DECIMAL_PLACES=2
+DEFAULT_CURRENCY="EUR"
+CURRENCIES=["USD","GBP"]
+
 DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'saudi_polish_db',
+        'USER': 'postgres',
+        'PASSWORD': '123321',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
+
+"""DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-}
+}"""
 
 
 # Password validation
@@ -116,7 +165,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+
+LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = 'UTC'
 
@@ -131,3 +181,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+DEFAULT_CURRENCY="USD"
+CURRENCIES=["USD","SAR"]
+#LC_NUMERIC ="en_US.utf8"
+#LC_ALL ="en_US.utf8"
+#LANG = "en_US.utf8"

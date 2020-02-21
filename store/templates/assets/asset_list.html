@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
   {% load static %}
-  {% include "_modal.html" %}
-  {% include "_addasset.html" %}
+     {% include "_modal.html" %}
+      {% include "_addasset.html" %}
   <div class="col-12 mb-3">
     {% if assets %}
       <table class="table table-striped">
@@ -26,16 +26,13 @@
               <td class="text-center">{{ asset.asset_quantity}}</td>
               <td class="text-center">{{ asset.total_price}}</td>
               <td class="text-center">
-                <button type="button"  disabled class="update-asset btn btn-sm btn-primary">
-                <span class="fa fa-plus"></span>
-                </button>
                 <button type="button" class="update-asset btn btn-sm btn-primary" data-id="{% url 'update_asset' asset.pk %}">
                 <span class="fa fa-pencil"></span>
                 </button>
                 <button type="button" class="delete-asset btn btn-sm btn-danger" data-id="{% url 'delete_asset' asset.pk %}">
                 <span class="fa fa-trash"></span>
                 </button>
-                
+               
               </td>
             </tr>
           {% endfor %}
@@ -47,26 +44,27 @@
   </div>
 </div>
 {% endblock content %}
+
 {% block extrascripts %}
-<script type="text/javascript">
-$(function () {
-
-
-$(".update-asset").each(function () {
-$(this).modalForm({formURL: $(this).data('id')});
-});
-
-$(".customer-info").each(function () {
-$(this).modalForm({formURL: $(this).data('id')});
-});
-
-$(".delete-asset").each(function () {
-$(this).modalForm({formURL: $(this).data('id')});
-})
-// Hide message
-$(".alert").fadeTo(2000, 500).slideUp(500, function(){
-$(".alert").slideUp(500);
-});
-});
-</script>
+  <script type="text/javascript">
+    $(function () {
+    
+      
+      $(".update-asset").each(function () {
+        $(this).modalForm({formURL: $(this).data('id')});
+      });
+      
+      $(".customer-info").each(function () {
+        $(this).modalForm({formURL: $(this).data('id')});
+      });
+      
+      $(".delete-asset").each(function () {
+        $(this).modalForm({formURL: $(this).data('id')});
+      })
+      // Hide message
+      $(".alert").fadeTo(2000, 500).slideUp(500, function(){
+        $(".alert").slideUp(500);
+      });
+    });
+  </script>
 {% endblock extrascripts %}

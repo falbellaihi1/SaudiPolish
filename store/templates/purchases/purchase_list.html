@@ -11,6 +11,7 @@
         <thead>
           <tr>
             <th class="text-center" scope="col">#</th>
+            <th class="text-center" scope="col">PK</th>
             <th class="text-center" scope="col">Vehicle</th>
             <th class="text-center" scope="col">Customer Name</th>
             <th class="text-center" scope="col">Customer Phone #</th>
@@ -19,13 +20,14 @@
             <th class="text-center" scope="col"> Date Booked</th>
             <th class="text-center" scope="col">Payments</th>
             <th class="text-center" scope="col">Remaining Payment</th>
-            <th class="text-center" scope="col"> View| Update | Remove  </th>
+            <th class="text-center" scope="col"> Create Transaction| View| Update | Remove  </th>
           </tr>
         </thead>
         <tbody>
           {% for purchase in purchases %}
             <tr>
               <th class="text-center" scope="row">{{ forloop.counter }}</th>
+              <td class="text-center">{{ purchase.pk}}</td>
               <td class="text-center">{{ purchase.vehicle }} - {{ purchase.vehicle.color }}</td>
               <td class="text-center">{{ purchase.vehicle.customer}}</td>
               <td class="text-center">{{ purchase.vehicle.customer.phone_number}}</td>
@@ -35,6 +37,10 @@
               <td class="text-center">{{ purchase.payments}}</td>
               <td class="text-center">{{ purchase.payable}}</td>
               <td class="text-center">
+                 <button type="button" class="delete-vehicle btn btn-sm btn-primary" disabled>
+                <span class="fa fa-plus"></span>
+                </button>
+                
                 <button type="button" class="read-purchase btn btn-sm btn-primary" onclick="window.location.href='{% url 'customer_profile' purchase.pk %}';">
                 <span class="fa fa-eye"></span>
                 </button>

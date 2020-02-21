@@ -7,7 +7,7 @@ from django import forms
 from django.conf import settings
 import datetime
 from datetime import time
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView
 from django.views import generic
 from django.urls import reverse_lazy
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, BSModalDeleteView, BSModalReadView
@@ -18,12 +18,17 @@ from .forms import (
 	PurchasesModel,
 	PurchasesModelForm,
 	AssetsModelForm,
-	PackageModelForm)
+	PackageModelForm,
+	ExpenseModelForm)
 from .models import (
 	AssetsModel,
 	Package,
 	Customer,
-	Vehicles)
+	Vehicles,
+	StoreExpensesModel)
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 # Create your views here.
 
 def home(request):
@@ -36,6 +41,8 @@ def data(request):
 	context = {'customer':Customer.objects.all().count()}
 	print(context)
 	return render(request, template_name,context)
+
+
 
 ######################################
 #R
@@ -64,6 +71,13 @@ class PurchasesList(generic.ListView):
     model = PurchasesModel
     context_object_name = 'purchases'
     template_name = 'purchases/purchase_list.html'
+
+@method_decorator(login_required, name='dispatch')
+class ExpenseList(generic.ListView):
+    model = StoreExpensesModel
+    context_object_name = 'expenses'
+    template_name = 'expenses/expense_list.html'
+
 @method_decorator(login_required, name='dispatch')
 class CustomerProfileReadView(generic.DetailView):
 	model = PurchasesModel
@@ -71,8 +85,8 @@ class CustomerProfileReadView(generic.DetailView):
 	def get_context_data(self, **kwargs):
 		
 		contexts = super().get_context_data(**kwargs)
-		a = self.object.vehicle.id
-		contexts['vehicles'] = PurchasesModel.objects.filter(vehicle=a).values(
+		vehicle_id = self.object.vehicle.id
+		contexts['vehicles'] = PurchasesModel.objects.filter(vehicle=vehicle_id).values(
 		'package__package_name', 
 		'package__package_specification',
 		'date', 
@@ -87,7 +101,45 @@ class CustomerProfileReadView(generic.DetailView):
 		)
 		
 		return contexts
+@method_decorator(login_required, name='dispatch')
+class StoreFinancialPosition(generic.ListView):
+    model = PurchasesModel
+    context_object_name = 'purchases'
+    template_name = 'financial.html'
+    
 
+
+    def get_context_data(self, **kwargs):
+    	context = super(StoreFinancialPosition, self).get_context_data(**kwargs)
+    	context['assets'] =AssetsModel.objects.all()
+    	context['expenses'] =StoreExpensesModel.objects.all()
+    	pos =self.Financial()
+    	context['t'] = pos
+    	print(pos)
+    	
+    	#print(context)
+    	return context
+    def Financial(self):
+    	assets_objects = AssetsModel.objects.all()
+    	expenses_objects =StoreExpensesModel.objects.all()
+    	purchase_objects = PurchasesModel.objects.all()
+    	assets_total_costs = 0 # total cost of asset *quantity purchased
+    	expense_total = 0
+    	purchase_total = 0
+    	purchase_recieveable = 0
+    	for asset in assets_objects:
+    		print(asset.asset_name,'-->',asset.total_price)
+    		assets_total_costs = assets_total_costs + asset.total_price
+    	for expense in expenses_objects:
+    		expense_total = expense_total + expense.amount
+
+    	for purchase in purchase_objects:
+    		purchase_total = purchase_total + purchase.payments
+    		purchase_recieveable = purchase_recieveable + abs(purchase.payable)
+    
+    	financial_summary = {'recivable':purchase_recieveable, 'paid':purchase_total,'expenses':expense_total,'assets':assets_total_costs}
+
+    	return financial_summary
 
 #########################CUSTOMER ########################
 
@@ -110,6 +162,16 @@ class PurchaseCreateView(BSModalCreateView):
     form_class = PurchasesModelForm
     success_message = 'Success: asset was created.'
     success_url = reverse_lazy('customer_list')
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+        	package = form.cleaned_data['package']
+        	payments = orm.cleaned_data['payments']
+        	package_price = package.package_price
+        	if(payments > package_price):
+        		print("why??????????")
+        		return
+        	return HttpResponseRedirect('/success/')
 
 @method_decorator(login_required, name='dispatch')
 class VehicleCreateView(BSModalCreateView):
@@ -117,8 +179,20 @@ class VehicleCreateView(BSModalCreateView):
     form_class = VehiclesModelForm
     success_message = 'Success: asset was created.'
     success_url = reverse_lazy('customer_list')
+
+class ExpenseCreateView(BSModalCreateView):
+    template_name = 'create_object.html'
+    form_class = ExpenseModelForm
+    success_message = 'Success: asset was created.'
+    success_url = reverse_lazy('expense_list')
+
+
+
+
 @method_decorator(login_required, name='dispatch')
 class AssetCreateView(BSModalCreateView):
+	#to create assets purchased for the store 
+	# this increases assets and decreases cash/bank accounts as the store owner will be paying for the assets
     template_name = 'create_object.html'
     form_class = AssetsModelForm
     success_message = 'Success: asset was created.'
@@ -163,6 +237,13 @@ class PurchaseUpdateView(BSModalUpdateView):
     form_class = PurchasesModelForm
     success_message = 'Success: Purchase was updated.'
     success_url = reverse_lazy('purchases_list')
+
+class ExpenseUpdateView(BSModalUpdateView):
+    model = StoreExpensesModel
+    template_name = 'update/update_object.html'
+    form_class = ExpenseModelForm
+    success_message = 'Success: Expense was updated.'
+    success_url = reverse_lazy('expense_list')
 ############################################
 
 #d delete
@@ -197,6 +278,12 @@ class PurchaseDeleteView(BSModalDeleteView):
     template_name = 'purchases/delete_purchase.html'
     success_message = 'Success: Purchase was deleted.'
     success_url = reverse_lazy('purchases_list')
+
+class ExpenseDeleteView(BSModalDeleteView):
+    model = ExpenseModelForm
+    template_name = 'expenses/delete_expenses.html'
+    success_message = 'Success: Expense was deleted.'
+    success_url = reverse_lazy('expense_list')
 
 ##############################
 """

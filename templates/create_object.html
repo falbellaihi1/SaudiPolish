@@ -1,6 +1,8 @@
 {% load widget_tweaks %}
-
-<form method="post" action="">
+{% load static %}
+<!-- <script src="{% static "js/jquery.js" %}" ></script> -->
+<!-- <script src="{% static "js/validatePayment.js" %}"></script> -->
+<form name="CreateObjectForm" id="CreateObjectForm" method="post">
   {% csrf_token %}
 
   <div class="modal-header">
@@ -22,10 +24,11 @@
       <div class="form-group">
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
         {% render_field field class="form-control" placeholder=field.label %} 
+        
 
         {% ifequal field.label "Customer" %}<button class="create-cus-btn btn btn-primary"  type="button" name="button">New Customer</button> {%endifequal%}
         {% ifequal field.label "Package" %}<button class="create-pak-btn btn btn-primary" type="button" name="button">New Package</button> {%endifequal%}
-        {% ifequal field.label "Vehicle" %}<button class="create-veh-btn btn btn-primary" type="button" name="button">New Package</button> {%endifequal%}
+        {% ifequal field.label "Vehicle" %}<button class="create-veh-btn btn btn-primary" type="button" name="button">New Vehicle</button> {%endifequal%}
         <div class="{% if field.errors %} invalid{% endif %}">
           {% for error in field.errors %}
             <p class="help-block">{{ error }}</p>
@@ -36,7 +39,8 @@
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="submit-btn btn btn-primary">Create</button>
+    <!--<button type="button" class="submit-btn btn btn-primary">Create</button>-->
+    <button type="submit" class="sub-btn btn btn-primary" value"Submit" id="submit">Create</button>
   </div>
 
 </form>
