@@ -1,0 +1,58 @@
+
+
+
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+{% include "_modal.html" %}
+
+  <div class="col-12 mb-3">
+    {% if financial %}
+     <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="text-center" scope="col">#</th>
+            <th class="text-center" scope="col">PAID BY CUSTOMERS </th>
+            <th class="text-center" scope="col">PAYABLE BY CUSTOMERS</th>
+            <th class="text-center" scope="col">TOTAL EXPENSES</th>
+            <th class="text-center" scope="col"> ASSETS COSTS </th>
+            <th class="text-center" scope="col"> rev </th>
+          </tr>
+        </thead>
+        <tbody>
+    
+            <tr>
+              <th class="text-center" scope="row">{{ forloop.counter }}</th>
+              <td class="text-center">{{ financial.paid }}</td>
+              <td class="text-center">{{ financial.recivable }}</td>
+              <td class="text-center">{{ financial.expenses}}</td>
+              <td class="text-center">{{ financial.assets}}</td>
+              <td class="text-center">{{ financial.revenues}}</td>
+              <td class="text-center">
+             
+        
+                
+              </td>
+            </tr>
+         
+        </tbody>
+      </table>
+    {% else %}
+      <p class="no-packages text-primary">No info added yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}
+{% block extrascripts %}
+<script type="text/javascript">
+$(function () {
+$(".update-package").each(function () {
+$(this).modalForm({formURL: $(this).data('id')});
+});
+$(".delete-package").each(function () {
+$(this).modalForm({formURL: $(this).data('id')});
+})
+
+});
+</script>
+{% endblock extrascripts %}s

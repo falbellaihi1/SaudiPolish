@@ -45,10 +45,10 @@ class VehiclesModelForm(BSModalForm):
 
 
 class PurchasesModelForm(BSModalForm):
-	redirect = False
+	redirect = True
 	class Meta:
 		
-		redirect = False
+		redirect = True
 		print(redirect)
 		model = PurchasesModel
 		fields = ["vehicle","package", "bookings","payments"]
@@ -63,12 +63,14 @@ class PurchasesModelForm(BSModalForm):
 		if payment is not None:
 			if payment > package.package_price:
 				self._errors['payments'] = self.error_class(['Payments cannot be larger than package price'])
-				self.redirect = True
+				self.redirect = False
+				
+
 				
 		if payment is None:
 			self._errors['payments'] = self.error_class(['Wrong'])
 			raise forms.ValidationError('hjhj')
-			self.redirect = True
+			self.redirect = False
 
 
 		print(self.redirect)

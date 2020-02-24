@@ -27,7 +27,7 @@ class Customer(models.Model):
 	full_name 			= models.CharField(default="Name of Customer", max_length=100)
 	phone_number 		= models.CharField(default="Number is not set", max_length=100)
 	customer_discount	= models.IntegerField(default=0)
-	email 				= models.CharField(max_length=100)
+	email 				= models.EmailField(max_length=254)
 	#car 				= models.ForeignKey(Vehicles, on_delete=models.CASCADE, null=True)
 	#package_purchased 	= models.ForeignKey(Package, on_delete=models.CASCADE, null = True) # from what i know, this is not ness
 	def __unicode__(self):

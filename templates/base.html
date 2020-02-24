@@ -234,7 +234,7 @@
               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                 <div class="info-box brown-bg">
                   <i class="fa fa-shopping-cart"></i>
-                  <div class="count">30</div>
+                  <div class="count">{% get_bookings_count %}</div>
                   <div class="title">Booked this week</div>
                 </div>
                 <!--/.info-box-->
@@ -243,7 +243,7 @@
               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                 <div class="info-box dark-bg">
                   <i class="fa fa-thumbs-o-up"></i>
-                  <div class="count">100</div>
+                  <div class="count">{% get_paid_count %}</div>
                   <div class="title">Paid Vehicles</div>
                 </div>
                 <!--/.info-box-->
@@ -253,7 +253,7 @@
                 <div class="info-box green-bg">
                   <i class="fa fa-cubes"></i>
                   <div class="count">{% get_assets_count %}</div>
-                  <div class="title">My Assets</div>
+                  <div class="title"><a href="{% url 'assets_list' %}">My Assets</a></div>
                 </div>
                 <!--/.info-box-->
               </div>
@@ -314,7 +314,7 @@
         -->
         <!--custome script for all page-->
         <script src="{% static "js/scripts.js" %}"></script>
-        <script src="{% static "js/popper.min.js" %}"></script>
+        /*<!-- <script src="{% static "js/popper.min.js" %}"></script> -->*/
         <script src="{% static "js/bootstrap.min.js" %}"></script>
         <script src="{% static "js/jquery.bootstrap.modal.forms.js" %}"></script>
         <script>

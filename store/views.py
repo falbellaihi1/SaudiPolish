@@ -26,6 +26,7 @@ from .models import (
 	Customer,
 	Vehicles,
 	StoreExpensesModel)
+from django.http import HttpResponseRedirect
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
@@ -105,7 +106,7 @@ class CustomerProfileReadView(generic.DetailView):
 class StoreFinancialPosition(generic.ListView):
     model = PurchasesModel
     context_object_name = 'purchases'
-    template_name = 'financial.html'
+    template_name = 'financial/financial.html'
     
 
 
@@ -113,9 +114,10 @@ class StoreFinancialPosition(generic.ListView):
     	context = super(StoreFinancialPosition, self).get_context_data(**kwargs)
     	context['assets'] =AssetsModel.objects.all()
     	context['expenses'] =StoreExpensesModel.objects.all()
-    	pos =self.Financial()
-    	context['t'] = pos
-    	print(pos)
+    	financial_position =self.Financial()
+    	context['financial'] = financial_position
+
+    	print(financial_position)
     	
     	#print(context)
     	return context
@@ -136,8 +138,10 @@ class StoreFinancialPosition(generic.ListView):
     	for purchase in purchase_objects:
     		purchase_total = purchase_total + purchase.payments
     		purchase_recieveable = purchase_recieveable + abs(purchase.payable)
+    	revenue = purchase_total - expense_total - assets_total_costs
+    	print("rev ",revenue)
     
-    	financial_summary = {'recivable':purchase_recieveable, 'paid':purchase_total,'expenses':expense_total,'assets':assets_total_costs}
+    	financial_summary = {'recivable':purchase_recieveable, 'paid':purchase_total,'expenses':expense_total,'assets':assets_total_costs, 'revenues':revenue}
 
     	return financial_summary
 
@@ -162,16 +166,13 @@ class PurchaseCreateView(BSModalCreateView):
     form_class = PurchasesModelForm
     success_message = 'Success: asset was created.'
     success_url = reverse_lazy('customer_list')
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-        	package = form.cleaned_data['package']
-        	payments = orm.cleaned_data['payments']
-        	package_price = package.package_price
-        	if(payments > package_price):
-        		print("why??????????")
-        		return
-        	return HttpResponseRedirect('/success/')
+    def form_valid(self, form):
+    	print("Valid")
+    	return super(PurchaseCreateView, self).form_valid(form)
+    def form_invalid(self, form):
+    	print("inValid")
+    	print(form.errors)
+    	return super(PurchaseCreateView, self).form_invalid(form)
 
 @method_decorator(login_required, name='dispatch')
 class VehicleCreateView(BSModalCreateView):

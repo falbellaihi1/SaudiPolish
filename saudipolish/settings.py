@@ -119,10 +119,7 @@ WSGI_APPLICATION = 'saudipolish.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-HORDAK_MAX_DIGITS =13
-HORDAK_DECIMAL_PLACES=2
-DEFAULT_CURRENCY="EUR"
-CURRENCIES=["USD","GBP"]
+
 
 DATABASES = {
     'default': {
