@@ -1,5 +1,5 @@
 
-Django==3.0.3
+Django==3.0.14
 django-bootstrap-modal-forms==1.5.0
 django-crispy-forms==1.8.1
 django-simple-gravatar==1.0.1
