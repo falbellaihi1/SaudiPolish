@@ -4,5 +4,5 @@ django-bootstrap-modal-forms==1.5.0
 django-crispy-forms==1.8.1
 django-simple-gravatar==1.0.1
 django-widget-tweaks==1.4.5
-requests==2.22.0
+requests==2.31.0
 
